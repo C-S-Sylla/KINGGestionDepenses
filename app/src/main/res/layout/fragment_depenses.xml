@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/charcoal_dark"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mes Dépenses"
+        android:textColor="@color/gold_primary"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp" />
+
+    <!-- ZONE DES FILTRES -->
+    <LinearLayout
+        android:id="@+id/layoutFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <!-- Filtre Période -->
+        <Spinner
+            android:id="@+id/spinnerFiltrePeriode"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/gold_primary"
+            android:entries="@array/filtre_periode" />
+
+        <!-- Filtre Catégorie -->
+        <Spinner
+            android:id="@+id/spinnerFiltreCategorie"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="@color/gold_primary"
+            android:entries="@array/filtre_categories" />
+    </LinearLayout>
+
+    <!-- Liste des dépenses -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerDepenses"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layoutFilters" />
+
+    <!-- BOUTON AJOUTER (FAB) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/gold_primary"
+        app:tint="@color/charcoal_dark" />
+
+</RelativeLayout>

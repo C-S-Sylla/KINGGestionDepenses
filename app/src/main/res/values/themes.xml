@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.GestionDepensesESMT" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/charcoal_dark</item>
+        <item name="colorPrimaryVariant">@color/charcoal_dark</item>
+        <item name="colorOnPrimary">@color/gold_primary</item>
+
+        <item name="colorSecondary">@color/gold_primary</item>
+        <item name="colorOnSecondary">@color/charcoal_dark</item>
+
+        <item name="android:windowBackground">@color/charcoal_dark</item>
+    </style>
+
+    <style name="Theme.KINGGestionDepenses" parent="Base.Theme.KINGGestionDepenses" />
+</resources>

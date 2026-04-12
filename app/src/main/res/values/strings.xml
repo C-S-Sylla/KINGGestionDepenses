@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">KINGGestionDepenses</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="moyens_paiement">
+        <item>Espèces</item>
+        <item>Mobile Money</item>
+        <item>Carte Bancaire</item>
+        <item>Autre</item>
+    </string-array>
+    <!-- Liste des catégories par défaut (Page 3 du CDC) -->
+    <string-array name="categories_defaut">
+        <item>Alimentation</item>
+        <item>Transport</item>
+        <item>Logement</item>
+        <item>Santé</item>
+        <item>Éducation</item>
+        <item>Loisirs</item>
+        <item>Habillement</item>
+        <item>Autre</item>
+    </string-array>
+    <string-array name="filtre_periode">
+        <item>Toutes les dates</item>
+        <item>Aujourd\'hui</item>
+        <item>Cette semaine</item>
+        <item>Ce mois</item>
+    </string-array>
+
+    <string-array name="filtre_categories">
+        <item>Toutes les catégories</item>
+        <item>Alimentation</item>
+        <item>Transport</item>
+        <item>Logement</item>
+        <item>Santé</item>
+        <item>Éducation</item>
+        <item>Loisirs</item>
+        <item>Habillement</item>
+        <item>Autre</item>
+    </string-array>
+</resources>
+
