@@ -1,6 +1,7 @@
 package sn.esmt.gestiondepenses.ui;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -126,8 +127,10 @@ public class AddExpenseActivity extends AppCompatActivity {
         String description = editDescription.getText().toString();
         String moyenPaiement = spinnerPaiement.getSelectedItem().toString();
         int categorieId = spinnerCategorie.getSelectedItemPosition() + 1;
+        SharedPreferences prefs = getSharedPreferences("MesParametres", MODE_PRIVATE);
+        int userId = prefs.getInt("ID_UTILISATEUR", -1);
 
-        Depense depense = new Depense(montant, categorieId, dateSelectionneeTimestamp, description, moyenPaiement);
+        Depense depense = new Depense(montant, categorieId, dateSelectionneeTimestamp, description, moyenPaiement, userId);
         depense.rubrique = rubrique;
 
         AppDatabase db = AppDatabase.getInstance(this);

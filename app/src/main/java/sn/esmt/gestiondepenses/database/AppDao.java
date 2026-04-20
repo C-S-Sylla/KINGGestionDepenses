@@ -8,6 +8,7 @@ import androidx.room.Update;
 import java.util.List;
 import sn.esmt.gestiondepenses.model.Categorie;
 import sn.esmt.gestiondepenses.model.Depense;
+import sn.esmt.gestiondepenses.model.Utilisateur;
 
 @Dao
 public interface AppDao {
@@ -17,28 +18,34 @@ public interface AppDao {
     @Query("SELECT * FROM categories")
     List<Categorie> getAllCategories();
 
-    // --- GESTION DES DÉPENSES ---
-
     @Insert
     void insertDepense(Depense depense);
 
     @Update
-    void updateDepense(Depense depense); // Pour MODIFIER
+    void updateDepense(Depense depense);
 
     @Delete
-    void deleteDepense(Depense depense); // Pour SUPPRIMER
+    void deleteDepense(Depense depense);
 
-    @Query("SELECT * FROM depenses ORDER BY date DESC")
-    List<Depense> getAllDepenses(); // Tri par date décroissant (Déjà fait !)
+    // FILTRES PAR UTILISATEUR (Indispensable !)
+    @Query("SELECT * FROM depenses WHERE utilisateurId = :userId ORDER BY date DESC")
+    List<Depense> getAllDepenses(int userId);
 
-    @Query("SELECT * FROM depenses WHERE categorieId = :catId ORDER BY date DESC")
-    List<Depense> getDepensesByCategorie(int catId);
+    @Query("SELECT * FROM depenses WHERE utilisateurId = :userId AND (:catId = 0 OR categorieId = :catId) AND date >= :dateDebut AND date <= :dateFin ORDER BY date DESC")
+    List<Depense> getDepensesFiltrees(int userId, int catId, long dateDebut, long dateFin);
 
-    @Query("SELECT * FROM depenses WHERE date >= :dateDebut AND date <= :dateFin ORDER BY date DESC")
-    List<Depense> getDepensesByPeriode(long dateDebut, long dateFin);
-    @Query("SELECT * FROM depenses WHERE (:catId = 0 OR categorieId = :catId) AND date >= :dateDebut AND date <= :dateFin ORDER BY date DESC")
-    List<Depense> getDepensesFiltrees(int catId, long dateDebut, long dateFin);
+    @Query("SELECT SUM(montant) FROM depenses WHERE utilisateurId = :userId AND date >= :dateDebut AND date <= :dateFin")
+    Double getTotalDepensesPeriode(int userId, long dateDebut, long dateFin);
+
+    @Query("SELECT * FROM depenses WHERE utilisateurId = :userId ORDER BY date DESC LIMIT 5")
+    List<Depense> getCinqDernieresDepenses(int userId);
+
     @Query("SELECT * FROM depenses WHERE id = :id LIMIT 1")
     Depense getDepenseById(int id);
 
+    @Insert
+    void insertUtilisateur(Utilisateur utilisateur);
+
+    @Query("SELECT * FROM utilisateurs WHERE pseudo = :pseudo AND motDePasse = :mdp LIMIT 1")
+    Utilisateur connexion(String pseudo, String mdp);
 }

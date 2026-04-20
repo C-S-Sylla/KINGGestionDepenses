@@ -16,14 +16,12 @@
         android:textStyle="bold"
         android:layout_marginBottom="10dp"/>
 
-    <!-- Liste des dépenses -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_expenses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title" />
 
-    <!-- BOUTON AJOUTER (FAB) GOLD -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_expense"
         android:layout_width="wrap_content"

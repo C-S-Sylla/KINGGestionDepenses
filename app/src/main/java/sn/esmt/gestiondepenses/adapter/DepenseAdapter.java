@@ -19,9 +19,9 @@ import sn.esmt.gestiondepenses.model.Depense;
 public class DepenseAdapter extends RecyclerView.Adapter<DepenseAdapter.DepenseHolder> {
 
     private List<Depense> depenses = new ArrayList<>();
-    private OnItemClickListener listener; // L'écouteur d'événements
+    private OnItemClickListener listener;
+    private boolean showActions = true; // Gère l'affichage des boutons
 
-    // Interface pour gérer les clics (Modifier et Supprimer)
     public interface OnItemClickListener {
         void onEditClick(Depense depense);
         void onDeleteClick(Depense depense);
@@ -36,10 +36,15 @@ public class DepenseAdapter extends RecyclerView.Adapter<DepenseAdapter.DepenseH
         notifyDataSetChanged();
     }
 
+    public void setShowActions(boolean show) {
+        this.showActions = show;
+    }
+
     @NonNull
     @Override
     public DepenseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_depense, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_depense, parent, false);
         return new DepenseHolder(itemView);
     }
 
@@ -54,12 +59,16 @@ public class DepenseAdapter extends RecyclerView.Adapter<DepenseAdapter.DepenseH
         if (current.rubrique != null && !current.rubrique.trim().isEmpty()) {
             holder.txtCategorie.setText(current.rubrique.substring(0, 1).toUpperCase() + current.rubrique.substring(1));
         } else {
-
             String nomCategorie = getNomCategorieTemporaire(current.categorieId);
             holder.txtCategorie.setText(nomCategorie);
         }
 
-        // Gestion des clics sur les boutons
+        if (showActions) {
+            holder.layoutActions.setVisibility(View.VISIBLE);
+        } else {
+            holder.layoutActions.setVisibility(View.GONE);
+        }
+
         holder.btnEdit.setOnClickListener(v -> {
             if (listener != null) listener.onEditClick(current);
         });
@@ -67,6 +76,11 @@ public class DepenseAdapter extends RecyclerView.Adapter<DepenseAdapter.DepenseH
         holder.btnDelete.setOnClickListener(v -> {
             if (listener != null) listener.onDeleteClick(current);
         });
+    }
+
+    @Override
+    public int getItemCount() {
+        return depenses.size();
     }
 
     private String getNomCategorieTemporaire(int id) {
@@ -82,14 +96,10 @@ public class DepenseAdapter extends RecyclerView.Adapter<DepenseAdapter.DepenseH
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return depenses.size();
-    }
-
     class DepenseHolder extends RecyclerView.ViewHolder {
         TextView txtCategorie, txtDate, txtMontant;
-        ImageView btnEdit, btnDelete; // Nouveaux boutons
+        ImageView btnEdit, btnDelete;
+        View layoutActions;
 
         public DepenseHolder(View itemView) {
             super(itemView);
@@ -98,6 +108,8 @@ public class DepenseAdapter extends RecyclerView.Adapter<DepenseAdapter.DepenseH
             txtMontant = itemView.findViewById(R.id.txtMontant);
             btnEdit = itemView.findViewById(R.id.btnEdit);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+
+            layoutActions = itemView.findViewById(R.id.layoutActions);
         }
     }
 }

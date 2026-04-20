@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/charcoal_dark"
+    android:background="@color/app_bg"
     android:padding="20dp">
 
     <LinearLayout
@@ -11,12 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Titre de bienvenue -->
+        <!-- Titre de bienvenue avec l'ID pour le Java -->
         <TextView
+            android:id="@+id/txtBonjour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bonjour !"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -24,17 +25,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Voici l'état de vos finances"
-            android:textColor="@color/gray_text"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:layout_marginBottom="25dp" />
 
-        <!-- CARTE DE SOLDE GOLD (L'élément central) -->
+        <!-- CARTE DE SOLDE -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="180dp"
             app:cardCornerRadius="24dp"
             app:cardElevation="10dp"
-            app:cardBackgroundColor="@color/gold_primary">
+            app:cardBackgroundColor="@color/accent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -46,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Solde Disponible"
-                    android:textColor="@color/charcoal_dark"
+                    android:textColor="@color/app_bg"
                     android:textSize="16sp" />
 
                 <TextView
@@ -54,8 +55,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/txtLabelSolde"
-                    android:text="150.000 FCFA"
-                    android:textColor="@color/charcoal_dark"
+                    android:text="0 FCFA"
+                    android:textColor="@color/app_bg"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp" />
@@ -66,7 +67,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_budget"
-                    app:tint="@color/charcoal_dark"
+                    app:tint="@color/app_bg"
                     android:alpha="0.2" />
 
             </RelativeLayout>
@@ -77,46 +78,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dernières transactions"
-            android:textColor="@color/gold_primary"
+            android:textColor="@color/accent"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="15dp" />
 
-        <!-- Placeholder pour la liste (On utilisera un RecyclerView plus tard) -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- La vraie liste (RecyclerView) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerTop5Transactions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="15dp"
-            app:cardBackgroundColor="@color/charcoal_light">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="15dp">
-
-                <!-- Exemple d'une ligne de dépense -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Restaurant"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="- 5.000 F"
-                        android:textColor="@color/error_red"
-                        android:textStyle="bold"/>
-                </RelativeLayout>
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

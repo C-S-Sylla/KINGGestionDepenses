@@ -9,18 +9,22 @@ public class Depense {
     public int id;
 
     public double montant;
-    public String rubrique;
     public int categorieId;
     public long date;
     public String description;
     public String moyenPaiement;
+    public String rubrique;
 
-    // LE CONSTRUCTEUR DOIT AVOIR EXACTEMENT CES 5 ARGUMENTS
-    public Depense(double montant, int categorieId, long date, String description, String moyenPaiement) {
+    // NOUVEAU : On stocke l'ID de celui qui a créé la dépense
+    public int utilisateurId;
+
+    // Constructeur mis à jour avec utilisateurId
+    public Depense(double montant, int categorieId, long date, String description, String moyenPaiement, int utilisateurId) {
         this.montant = montant;
         this.categorieId = categorieId;
         this.date = date;
         this.description = description;
         this.moyenPaiement = moyenPaiement;
+        this.utilisateurId = utilisateurId;
     }
 }
