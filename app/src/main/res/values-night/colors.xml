@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Look Charbon & Or -->
+    <color name="app_bg">#121212</color>           <!-- Charbon -->
+    <color name="card_bg">#1E1E1E</color>          <!-- Charbon léger -->
+    <color name="accent">#D4AF37</color>           <!-- Or (Gold) -->
+    <color name="text_primary">#FFFFFF</color>     <!-- Blanc pour contraste -->
+    <color name="text_secondary">#B4B4B4</color>
+    <color name="error_red">#CF6679</color>
+
+    <!-- Aliases pour la compatibilité avec tes layouts XML -->
+    <color name="charcoal_dark">#121212</color>    <!-- Reste Charbon -->
+    <color name="charcoal_light">#1E1E1E</color>
+    <color name="gold_primary">#D4AF37</color>     <!-- Reste Or -->
+    <color name="gray_text">#B4B4B4</color>
+    <color name="white">#FFFFFF</color>
+</resources>

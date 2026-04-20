@@ -1,66 +1,145 @@
 package sn.esmt.gestiondepenses.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Calendar;
+import java.util.List;
 
 import sn.esmt.gestiondepenses.R;
+import sn.esmt.gestiondepenses.adapter.DepenseAdapter;
+import sn.esmt.gestiondepenses.database.AppDatabase;
+import sn.esmt.gestiondepenses.model.Depense;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DashboardFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DashboardFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private TextView txtSoldeValeur, txtBonjour;
+    private RecyclerView recyclerTop5;
+    private DepenseAdapter adapterTop5;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-    public DashboardFragment() {
-        // Required empty public constructor
-    }
+        // 1. Lier les éléments visuels
+        txtSoldeValeur = root.findViewById(R.id.txtSoldeValeur);
+        txtBonjour = root.findViewById(R.id.txtBonjour); // Le fameux TextView !
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DashboardFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DashboardFragment newInstance(String param1, String param2) {
-        DashboardFragment fragment = new DashboardFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        // 2. Afficher le nom de l'utilisateur
+        afficherNomUtilisateur();
+
+        // 3. Configurer la petite liste des 5 transactions
+        recyclerTop5 = root.findViewById(R.id.recyclerTop5Transactions);
+        recyclerTop5.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapterTop5 = new DepenseAdapter();
+        adapterTop5.setShowActions(false);
+        recyclerTop5.setAdapter(adapterTop5);
+
+
+        // On masque les boutons modifier/supprimer pour cette petite liste de résumé
+        adapterTop5.setOnItemClickListener(new DepenseAdapter.OnItemClickListener() {
+            @Override public void onEditClick(Depense depense) {}
+            @Override public void onDeleteClick(Depense depense) {}
+        });
+
+        calculerSoldeDuMois();
+        chargerTop5Transactions();
+
+        return root;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onResume() {
+        super.onResume();
+        afficherNomUtilisateur();
+        calculerSoldeDuMois();
+        chargerTop5Transactions();
+    }
+
+    private void afficherNomUtilisateur() {
+        if (getContext() == null) return;
+
+        // On va lire dans la mémoire du téléphone (créée par le menu latéral)
+        SharedPreferences prefs = getContext().getSharedPreferences("MesParametres", Context.MODE_PRIVATE);
+        String nomUtilisateur = prefs.getString("NOM_UTILISATEUR", "");
+
+        if (nomUtilisateur.isEmpty()) {
+            txtBonjour.setText("Bonjour !");
+        } else {
+            txtBonjour.setText("Bonjour, " + nomUtilisateur + " !");
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+    private void calculerSoldeDuMois() {
+        if (getContext() == null) return;
+
+        // 1. Récupérer le userId
+        SharedPreferences prefs = getContext().getSharedPreferences("MesParametres", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("ID_UTILISATEUR", -1);
+
+        // 2. Calculer les dates du mois (Code identique à avant)
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0); cal.set(Calendar.MINUTE, 0);
+        long dateDebutMois = cal.getTimeInMillis();
+
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, 23); cal.set(Calendar.MINUTE, 59);
+        long dateFinMois = cal.getTimeInMillis();
+
+        try {
+            AppDatabase db = AppDatabase.getInstance(getContext());
+
+            // 3. Somme des dépenses de l'utilisateur pour ce mois
+            Double totalDepenses = db.appDao().getTotalDepensesPeriode(userId, dateDebutMois, dateFinMois);
+            if (totalDepenses == null) totalDepenses = 0.0;
+
+            // 4. Calcul final
+            double totalRevenus = 0.0; // Stand-by
+            double solde = totalRevenus - totalDepenses;
+
+            txtSoldeValeur.setText(solde + " FCFA");
+
+            // 5. Couleur dynamique (Rouge si négatif, App_bg si positif)
+            if (solde < 0) {
+                txtSoldeValeur.setTextColor(getResources().getColor(R.color.error_red));
+            } else {
+                txtSoldeValeur.setTextColor(getResources().getColor(R.color.app_bg));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void chargerTop5Transactions() {
+        if (getContext() == null) return;
+
+        // 1. Récupérer le userId
+        SharedPreferences prefs = getContext().getSharedPreferences("MesParametres", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("ID_UTILISATEUR", -1);
+
+        try {
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            // 2. Demander uniquement les dépenses de cet utilisateur
+            List<Depense> top5 = db.appDao().getCinqDernieresDepenses(userId);
+
+            if (adapterTop5 != null) {
+                adapterTop5.setDepenses(top5);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

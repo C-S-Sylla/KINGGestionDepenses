@@ -60,8 +60,8 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- BOUTONS ACTIONS (Modifier / Supprimer) -->
         <LinearLayout
+            android:id="@+id/layoutActions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtMontant"
@@ -75,7 +75,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="16dp"
                 android:src="@android:drawable/ic_menu_edit"
-                app:tint="@color/gold_primary" />
+                app:tint="@color/accent" />
 
             <ImageView
                 android:id="@+id/btnDelete"

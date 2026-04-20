@@ -1,7 +1,9 @@
 package sn.esmt.gestiondepenses.ui;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,13 +105,17 @@ public class DepensesFragment extends Fragment {
     private void appliquerFiltres() {
         if (getContext() == null) return;
 
+        // A. RÉCUPÉRER L'ID DE L'UTILISATEUR CONNECTÉ
+        SharedPreferences prefs = getContext().getSharedPreferences("MesParametres", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("ID_UTILISATEUR", -1);
+
+        // B. RÉCUPÉRER LES OPTIONS DES SPINNERS
         int indexCat = spinnerCategorie.getSelectedItemPosition();
-        // Index 0 = "Toutes les catégories". Index 1 = Alimentation (Id=1 en base), etc. Exactement ce qu'il faut !
-
         int indexPeriode = spinnerPeriode.getSelectedItemPosition();
-        long dateDebut = 0;
-        long dateFin = Long.MAX_VALUE; // Jusqu'à la fin des temps par défaut
 
+        // C. LOGIQUE DES DATES
+        long dateDebut = 0;
+        long dateFin = Long.MAX_VALUE;
         Calendar cal = Calendar.getInstance();
 
         switch (indexPeriode) {
@@ -120,27 +126,28 @@ public class DepensesFragment extends Fragment {
                 dateFin = cal.getTimeInMillis();
                 break;
             case 2: // Cette semaine
-                cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek()); // Lundi
-                cal.set(Calendar.HOUR_OF_DAY, 0); cal.set(Calendar.MINUTE, 0); cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+                cal.set(Calendar.HOUR_OF_DAY, 0); cal.set(Calendar.MINUTE, 0);
                 dateDebut = cal.getTimeInMillis();
-                cal.add(Calendar.DAY_OF_WEEK, 6); // Dimanche
-                cal.set(Calendar.HOUR_OF_DAY, 23); cal.set(Calendar.MINUTE, 59); cal.set(Calendar.SECOND, 59);
+                cal.add(Calendar.DAY_OF_WEEK, 6);
+                cal.set(Calendar.HOUR_OF_DAY, 23); cal.set(Calendar.MINUTE, 59);
                 dateFin = cal.getTimeInMillis();
                 break;
             case 3: // Ce mois
-                cal.set(Calendar.DAY_OF_MONTH, 1); // 1er du mois
-                cal.set(Calendar.HOUR_OF_DAY, 0); cal.set(Calendar.MINUTE, 0); cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
                 dateDebut = cal.getTimeInMillis();
-                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH)); // Dernier jour
-                cal.set(Calendar.HOUR_OF_DAY, 23); cal.set(Calendar.MINUTE, 59); cal.set(Calendar.SECOND, 59);
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+                cal.set(Calendar.HOUR_OF_DAY, 23);
                 dateFin = cal.getTimeInMillis();
                 break;
         }
 
+        // D. APPEL AU DAO AVEC LE USER_ID
         try {
-            // L'appel à la super-requête
             AppDatabase db = AppDatabase.getInstance(getContext());
-            List<Depense> depensesFiltrees = db.appDao().getDepensesFiltrees(indexCat, dateDebut, dateFin);
+            // On passe bien userId en premier argument !
+            List<Depense> depensesFiltrees = db.appDao().getDepensesFiltrees(userId, indexCat, dateDebut, dateFin);
 
             if (adapter != null) {
                 adapter.setDepenses(depensesFiltrees);

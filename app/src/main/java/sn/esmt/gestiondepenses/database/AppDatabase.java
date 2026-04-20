@@ -6,12 +6,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import sn.esmt.gestiondepenses.model.Categorie;
-import sn.esmt.gestiondepenses.model.Depense; // IMPORTANT : Import de la dépense
+import sn.esmt.gestiondepenses.model.Depense;
+import sn.esmt.gestiondepenses.model.Utilisateur;
+
 
 // On ajoute Depense.class ici dans la liste des entities
 // On passe la version à 2 car on a ajouté une table
 // On met exportSchema = false pour enlever le warning jaune
-@Database(entities = {Categorie.class, Depense.class}, version = 2, exportSchema = false)
+@Database(entities = {Categorie.class, Depense.class, Utilisateur.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract AppDao appDao();
@@ -21,7 +23,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "gestion_depenses_db")
-                    .fallbackToDestructiveMigration() // Détruit et recrée la base si on change de version
+                    .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build();
         }
