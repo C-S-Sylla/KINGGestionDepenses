@@ -3,10 +3,12 @@ package sn.esmt.gestiondepenses.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -122,7 +124,8 @@ public class DashboardFragment extends Fragment {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("DashboardFragment", "Erreur lors du calcul du solde", e);
+            Toast.makeText(getContext(), "Erreur lors du calcul du solde", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -142,7 +145,8 @@ public class DashboardFragment extends Fragment {
                 adapterTop5.setDepenses(top5);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("DashboardFragment", "Erreur lors du chargement des dernières transactions", e);
+            Toast.makeText(getContext(), "Erreur lors du chargement", Toast.LENGTH_SHORT).show();
         }
     }
 }

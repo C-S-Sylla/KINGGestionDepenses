@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -162,7 +163,8 @@ public class RevenusFragment extends Fragment {
                 adapter.setRevenus(revenusFiltres);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("RevenusFragment", "Erreur lors du filtrage des revenus", e);
+            Toast.makeText(getContext(), "Erreur lors du chargement", Toast.LENGTH_SHORT).show();
         }
     }
 }
