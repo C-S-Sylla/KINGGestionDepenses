@@ -1,4 +1,5 @@
 package sn.esmt.gestiondepenses.database;
+import sn.esmt.gestiondepenses.model.Revenu;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -48,4 +49,46 @@ public interface AppDao {
 
     @Query("SELECT * FROM utilisateurs WHERE pseudo = :pseudo AND motDePasse = :mdp LIMIT 1")
     Utilisateur connexion(String pseudo, String mdp);
+
+
+    // ========== MÉTHODES POUR LES REVENUS ==========
+
+    // Insertion : on passe l'objet complet, Room génère l'id automatiquement
+    @Insert
+    void insertRevenu(Revenu revenu);
+
+    // Mise à jour : Room repère la ligne grâce à l'id (clé primaire)
+    @Update
+    void updateRevenu(Revenu revenu);
+
+    // Suppression : pareil, identifie la ligne par son id
+    @Delete
+    void deleteRevenu(Revenu revenu);
+
+    // Tous les revenus de l'utilisateur, du plus récent au plus ancien
+    @Query("SELECT * FROM revenus WHERE utilisateurId = :userId ORDER BY date DESC")
+    List<Revenu> getAllRevenus(int userId);
+
+    // Filtrage combiné : par source et par période de dates
+    // Astuce : (:source = '' OR source = :source) → si source vide, on ne filtre pas
+    @Query("SELECT * FROM revenus WHERE utilisateurId = :userId " +
+            "AND (:source = '' OR source = :source) " +
+            "AND date >= :dateDebut AND date <= :dateFin " +
+            "ORDER BY date DESC")
+    List<Revenu> getRevenusFiltres(int userId, String source, long dateDebut, long dateFin);
+
+    // Somme des revenus sur une période — utile pour calculer le solde
+    // Retour Double (objet) car SUM peut retourner null s'il n'y a aucune ligne
+    @Query("SELECT SUM(montant) FROM revenus WHERE utilisateurId = :userId " +
+            "AND date >= :dateDebut AND date <= :dateFin")
+    Double getTotalRevenusPeriode(int userId, long dateDebut, long dateFin);
+
+    // 5 derniers revenus pour un éventuel résumé sur le Dashboard
+    @Query("SELECT * FROM revenus WHERE utilisateurId = :userId ORDER BY date DESC LIMIT 5")
+    List<Revenu> getCinqDerniersRevenus(int userId);
+
+    // Récupère un revenu unique par son id — utilisé en mode Modification
+    @Query("SELECT * FROM revenus WHERE id = :id LIMIT 1")
+    Revenu getRevenuById(int id);
+
 }

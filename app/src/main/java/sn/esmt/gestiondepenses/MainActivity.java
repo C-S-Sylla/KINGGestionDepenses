@@ -1,4 +1,5 @@
 package sn.esmt.gestiondepenses; // Vérifie que c'est bien ton package
+import sn.esmt.gestiondepenses.ui.RevenusFragment;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_depenses) {
                 selectedFragment = new DepensesFragment();
             } else if (id == R.id.nav_revenus) {
-                selectedFragment = new DashboardFragment(); // Placeholder
+                selectedFragment = new RevenusFragment(); // Placeholder
             } else if (id == R.id.nav_budgets) {
                 selectedFragment = new DashboardFragment(); // Placeholder
             }
