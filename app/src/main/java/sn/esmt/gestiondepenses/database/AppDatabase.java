@@ -7,13 +7,15 @@ import androidx.room.RoomDatabase;
 
 import sn.esmt.gestiondepenses.model.Categorie;
 import sn.esmt.gestiondepenses.model.Depense;
+import sn.esmt.gestiondepenses.model.Revenu;
 import sn.esmt.gestiondepenses.model.Utilisateur;
 
-
-// On ajoute Depense.class ici dans la liste des entities
-// On passe la version à 2 car on a ajouté une table
-// On met exportSchema = false pour enlever le warning jaune
-@Database(entities = {Categorie.class, Depense.class, Utilisateur.class}, version = 5, exportSchema = false)
+// On ajoute Revenu.class dans la liste des entities
+// On INCRÉMENTE la version (5 → 6) car on a ajouté une nouvelle table
+// fallbackToDestructiveMigration (déjà actif) effacera la BDD au prochain lancement
+@Database(entities = {Categorie.class, Depense.class, Utilisateur.class, Revenu.class},
+        version = 6,
+        exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract AppDao appDao();

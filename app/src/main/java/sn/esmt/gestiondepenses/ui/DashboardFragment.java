@@ -101,21 +101,24 @@ public class DashboardFragment extends Fragment {
         try {
             AppDatabase db = AppDatabase.getInstance(getContext());
 
-            // 3. Somme des dépenses de l'utilisateur pour ce mois
-            Double totalDepenses = db.appDao().getTotalDepensesPeriode(userId, dateDebutMois, dateFinMois);
-            if (totalDepenses == null) totalDepenses = 0.0;
+            // 3. Total des dépenses de l'utilisateur sur le mois en cours
+            Double totalDepensesBrut = db.appDao().getTotalDepensesPeriode(userId, dateDebutMois, dateFinMois);
+            // SUM peut retourner null s'il n'y a aucune ligne → on remet à 0
+            double totalDepenses = (totalDepensesBrut == null) ? 0.0 : totalDepensesBrut;
 
-            // 4. Calcul final
-            double totalRevenus = 0.0; // Stand-by
+            // 4. Total des revenus de l'utilisateur sur le mois en cours
+            Double totalRevenusBrut = db.appDao().getTotalRevenusPeriode(userId, dateDebutMois, dateFinMois);
+            double totalRevenus = (totalRevenusBrut == null) ? 0.0 : totalRevenusBrut;
+
+            // 5. Calcul du solde disponible (CDC §2.2.2)
             double solde = totalRevenus - totalDepenses;
-
             txtSoldeValeur.setText(solde + " FCFA");
 
-            // 5. Couleur dynamique (Rouge si négatif, App_bg si positif)
+            // 6. Indicateur visuel : ROUGE si négatif, VERT si positif (CDC §2.2.2)
             if (solde < 0) {
                 txtSoldeValeur.setTextColor(getResources().getColor(R.color.error_red));
             } else {
-                txtSoldeValeur.setTextColor(getResources().getColor(R.color.app_bg));
+                txtSoldeValeur.setTextColor(getResources().getColor(R.color.success_green));
             }
 
         } catch (Exception e) {

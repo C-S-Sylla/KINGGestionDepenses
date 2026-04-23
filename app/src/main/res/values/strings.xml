@@ -37,5 +37,26 @@
         <item>Habillement</item>
         <item>Autre</item>
     </string-array>
+
+    <!-- Sources de revenu (CDC §2.2.1) — utilisé dans le Spinner du formulaire -->
+    <string-array name="sources_revenu">
+        <item>Salaire</item>
+        <item>Commerce</item>
+        <item>Freelance</item>
+        <item>Don</item>
+        <item>Autre</item>
+    </string-array>
+
+    <!-- Filtre par source — version avec "Toutes" en première position -->
+    <string-array name="filtre_sources_revenu">
+        <item>Toutes les sources</item>
+        <item>Salaire</item>
+        <item>Commerce</item>
+        <item>Freelance</item>
+        <item>Don</item>
+        <item>Autre</item>
+    </string-array>
+    <!-- Vert pour solde positif et montants de revenu (CDC §2.2.2) -->
+    <color name="success_green">#2E7D32</color>
 </resources>
 

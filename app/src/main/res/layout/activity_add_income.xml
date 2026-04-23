@@ -1,6 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- ScrollView : permet de scroller si le clavier réduit l'écran -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_bg">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- TITRE — modifié dynamiquement en "Modifier le Revenu" en mode édition -->
+        <TextView
+            android:id="@+id/txtTitrePage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nouveau Revenu"
+            android:textColor="@color/gold_primary"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="25dp" />
+
+        <!-- 1. MONTANT — obligatoire, décimal -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Montant (FCFA) *"
+            app:hintTextColor="@color/gold_primary"
+            android:textColorHint="@color/gray_text"
+            app:boxStrokeColor="@color/gold_primary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editMontant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textColor="@color/text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 2. SOURCE — Spinner alimenté par le tableau sources_revenu -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Source *"
+            android:textColor="@color/gray_text"
+            android:layout_marginTop="15dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerSource"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/gold_primary"
+            android:entries="@array/sources_revenu" />
+
+        <!-- 3. DATE — bouton qui ouvre un DatePickerDialog au clic -->
+        <Button
+            android:id="@+id/btnDate"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp"
+            android:text="Date : Aujourd'hui"
+            android:textColor="@color/text_primary"
+            app:strokeColor="@color/gray_text" />
+
+        <!-- 4. DESCRIPTION — optionnelle, sur 3 lignes -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="Description"
+            app:hintTextColor="@color/gold_primary"
+            android:textColorHint="@color/gray_text"
+            app:boxStrokeColor="@color/gold_primary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:textColor="@color/text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- BOUTON ENREGISTRER — texte modifié en "METTRE À JOUR" en mode édition -->
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="ENREGISTRER LE REVENU"
+            android:backgroundTint="@color/gold_primary"
+            android:textColor="@color/app_bg"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp" />
+
+    </LinearLayout>
+</ScrollView>
