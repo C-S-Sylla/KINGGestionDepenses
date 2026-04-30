@@ -79,7 +79,6 @@ public class BudgetsFragment extends Fragment {
                     // Budget Global : Somme de TOUTES les dépenses
                     somme = db.appDao().getTotalDepensesPeriode(userId, debut, fin);
                 } else {
-                    // Budget par catégorie
                     somme = db.appDao().getSommeDepensesParCategorie(userId, b.categorieId, debut, fin);
                 }
                 if (somme == null) somme = 0.0;

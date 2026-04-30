@@ -21,4 +21,5 @@ public class Budget {
         this.annee = annee;
         this.utilisateurId = utilisateurId;
     }
+
 }

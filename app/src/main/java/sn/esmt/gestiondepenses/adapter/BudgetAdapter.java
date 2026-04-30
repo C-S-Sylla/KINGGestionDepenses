@@ -66,9 +66,9 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetHold
         // Vert < 70% | Orange 70-90% | Rouge > 90%
         int couleur;
         if (pourcentage < 70) {
-            couleur = Color.parseColor("#4CAF50"); // Vert
+            couleur = Color.parseColor("#4CAF50");
         } else if (pourcentage <= 90) {
-            couleur = Color.parseColor("#FFA500"); // Orange
+            couleur = Color.parseColor("#FFA500");
         } else {
             couleur = Color.RED;
         }

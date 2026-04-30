@@ -20,7 +20,7 @@ public class DepenseAdapter extends RecyclerView.Adapter<DepenseAdapter.DepenseH
 
     private List<Depense> depenses = new ArrayList<>();
     private OnItemClickListener listener;
-    private boolean showActions = true; // Gère l'affichage des boutons
+    private boolean showActions = true;
 
     public interface OnItemClickListener {
         void onEditClick(Depense depense);

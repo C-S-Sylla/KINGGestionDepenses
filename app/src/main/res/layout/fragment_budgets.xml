@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/txtTitleBudgets" />
 
-    <!-- Image "Aucun Budget" (Empty State) -->
+    <!-- Image "Aucun Budget" -->
     <LinearLayout
         android:id="@+id/layoutEmptyBudgets"
         android:layout_width="wrap_content"

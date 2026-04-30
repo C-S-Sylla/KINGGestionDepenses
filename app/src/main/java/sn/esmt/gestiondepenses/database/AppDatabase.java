@@ -12,9 +12,6 @@ import sn.esmt.gestiondepenses.model.Revenu;
 import sn.esmt.gestiondepenses.model.Utilisateur;
 import sn.esmt.gestiondepenses.model.Revenu;
 
-// On ajoute Revenu.class dans la liste des entities
-// On INCRÉMENTE la version (5 → 6) car on a ajouté une nouvelle table
-// fallbackToDestructiveMigration (déjà actif) effacera la BDD au prochain lancement
 @Database(entities = {Categorie.class, Depense.class, Utilisateur.class, Budget.class, Revenu.class}, version = 6, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 

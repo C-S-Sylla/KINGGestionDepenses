@@ -55,8 +55,6 @@ public interface AppDao {
     Utilisateur connexion(String pseudo, String mdp);
 
 
-    // ========== MÉTHODES POUR LES REVENUS ==========
-
     // Insertion : on passe l'objet complet, Room génère l'id automatiquement
     @Insert
     void insertRevenu(Revenu revenu);
@@ -81,8 +79,7 @@ public interface AppDao {
             "ORDER BY date DESC")
     List<Revenu> getRevenusFiltres(int userId, String source, long dateDebut, long dateFin);
 
-    // Somme des revenus sur une période — utile pour calculer le solde
-    // Retour Double (objet) car SUM peut retourner null s'il n'y a aucune ligne
+
     @Query("SELECT SUM(montant) FROM revenus WHERE utilisateurId = :userId " +
             "AND date >= :dateDebut AND date <= :dateFin")
     Double getTotalRevenusPeriode(int userId, long dateDebut, long dateFin);
