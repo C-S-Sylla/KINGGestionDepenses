@@ -1,4 +1,5 @@
 package sn.esmt.gestiondepenses; // Vérifie que c'est bien ton package
+import sn.esmt.gestiondepenses.ui.BudgetsFragment;
 import sn.esmt.gestiondepenses.ui.RevenusFragment;
 
 import android.os.Bundle;
@@ -56,9 +57,10 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putBoolean("MODE_NUIT", isChecked).apply();
 
             if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Charbon/Gold
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); // Charbon/Gold
             } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); // Marbre/Platine
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Marbre/Platine
+
             }
         });
 
@@ -79,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_revenus) {
                 selectedFragment = new RevenusFragment(); // Placeholder
             } else if (id == R.id.nav_budgets) {
-                selectedFragment = new DashboardFragment(); // Placeholder
+                selectedFragment = new BudgetsFragment(); // Placeholder
             }
+
 
             if (selectedFragment != null) {
                 loadFragment(selectedFragment);

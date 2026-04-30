@@ -1,15 +1,19 @@
 package sn.esmt.gestiondepenses.database;
+import sn.esmt.gestiondepenses.model.Budget;
 import sn.esmt.gestiondepenses.model.Revenu;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 import java.util.List;
 import sn.esmt.gestiondepenses.model.Categorie;
 import sn.esmt.gestiondepenses.model.Depense;
 import sn.esmt.gestiondepenses.model.Utilisateur;
+import sn.esmt.gestiondepenses.model.Revenu;
+import sn.esmt.gestiondepenses.model.Revenu;
 
 @Dao
 public interface AppDao {
@@ -91,4 +95,13 @@ public interface AppDao {
     @Query("SELECT * FROM revenus WHERE id = :id LIMIT 1")
     Revenu getRevenuById(int id);
 
+
+    @Query("SELECT * FROM budgets WHERE utilisateurId = :userId AND mois = :m AND annee = :a")
+    List<Budget> getBudgetsDuMois(int userId, int m, int a);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertBudget(Budget budget);
+
+    @Query("SELECT SUM(montant) FROM depenses WHERE utilisateurId = :userId AND categorieId = :catId AND date >= :debut AND date <= :fin")
+    Double getSommeDepensesParCategorie(int userId, int catId, long debut, long fin);
 }

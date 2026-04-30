@@ -33,11 +33,13 @@ public class DepensesFragment extends Fragment {
     private RecyclerView recyclerView;
     private DepenseAdapter adapter;
     private Spinner spinnerPeriode, spinnerCategorie;
+    private View layoutEmpty;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_depenses, container, false);
+        layoutEmpty = root.findViewById(R.id.layoutEmpty);
 
         // 1. Initialisation UI
         recyclerView = root.findViewById(R.id.recyclerDepenses);
@@ -98,22 +100,19 @@ public class DepensesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        appliquerFiltres(); // Charge la liste quand on arrive sur la page
+        appliquerFiltres();
     }
 
     // Le moteur de filtrage complet
     private void appliquerFiltres() {
         if (getContext() == null) return;
 
-        // A. RÉCUPÉRER L'ID DE L'UTILISATEUR CONNECTÉ
         SharedPreferences prefs = getContext().getSharedPreferences("MesParametres", Context.MODE_PRIVATE);
         int userId = prefs.getInt("ID_UTILISATEUR", -1);
 
-        // B. RÉCUPÉRER LES OPTIONS DES SPINNERS
         int indexCat = spinnerCategorie.getSelectedItemPosition();
         int indexPeriode = spinnerPeriode.getSelectedItemPosition();
 
-        // C. LOGIQUE DES DATES
         long dateDebut = 0;
         long dateFin = Long.MAX_VALUE;
         Calendar cal = Calendar.getInstance();
@@ -143,14 +142,20 @@ public class DepensesFragment extends Fragment {
                 break;
         }
 
-        // D. APPEL AU DAO AVEC LE USER_ID
         try {
             AppDatabase db = AppDatabase.getInstance(getContext());
-            // On passe bien userId en premier argument !
             List<Depense> depensesFiltrees = db.appDao().getDepensesFiltrees(userId, indexCat, dateDebut, dateFin);
 
             if (adapter != null) {
                 adapter.setDepenses(depensesFiltrees);
+
+                if (depensesFiltrees.isEmpty()) {
+                    layoutEmpty.setVisibility(View.VISIBLE); // Affiche l'image d'absence de données
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    layoutEmpty.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

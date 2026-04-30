@@ -34,7 +34,7 @@ public class DashboardFragment extends Fragment {
 
         // 1. Lier les éléments visuels
         txtSoldeValeur = root.findViewById(R.id.txtSoldeValeur);
-        txtBonjour = root.findViewById(R.id.txtBonjour); // Le fameux TextView !
+        txtBonjour = root.findViewById(R.id.txtBonjour);
 
         // 2. Afficher le nom de l'utilisateur
         afficherNomUtilisateur();

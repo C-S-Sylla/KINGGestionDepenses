@@ -58,5 +58,17 @@
     </string-array>
     <!-- Vert pour solde positif et montants de revenu (CDC §2.2.2) -->
     <color name="success_green">#2E7D32</color>
+
+    <string-array name="categories_budget">
+        <item>Budget Global (Toutes dépenses)</item>
+        <item>Alimentation</item>
+        <item>Transport</item>
+        <item>Logement</item>
+        <item>Santé</item>
+        <item>Éducation</item>
+        <item>Loisirs</item>
+        <item>Habillement</item>
+        <item>Autre</item>
+    </string-array>
 </resources>
 

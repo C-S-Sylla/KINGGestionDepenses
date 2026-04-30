@@ -33,6 +33,7 @@ public class RevenusFragment extends Fragment {
     private RecyclerView recyclerView;
     private RevenuAdapter adapter;
     private Spinner spinnerPeriode, spinnerSource;
+    private View layoutEmpty;
 
     @Nullable
     @Override
@@ -41,6 +42,7 @@ public class RevenusFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Gonfle le layout XML en View Java
         View root = inflater.inflate(R.layout.fragment_revenus, container, false);
+        layoutEmpty = root.findViewById(R.id.layoutEmpty);
 
         // 1. CONFIGURATION DE LA RECYCLERVIEW
         recyclerView = root.findViewById(R.id.recyclerRevenus);
@@ -112,31 +114,25 @@ public class RevenusFragment extends Fragment {
     private void appliquerFiltres() {
         if (getContext() == null) return;
 
-        // A. ID de l'utilisateur connecté (pour l'isolation multi-user)
         SharedPreferences prefs = getContext().getSharedPreferences("MesParametres", Context.MODE_PRIVATE);
         int userId = prefs.getInt("ID_UTILISATEUR", -1);
 
-        // B. POSITIONS sélectionnées dans les spinners
         int indexSource = spinnerSource.getSelectedItemPosition();
         int indexPeriode = spinnerPeriode.getSelectedItemPosition();
-
-        // Position 0 = "Toutes les sources" → on envoie "" au DAO (pas de filtre)
         String sourceFiltre = (indexSource == 0) ? "" : spinnerSource.getSelectedItem().toString();
 
-        // C. CALCUL DES DATES selon la période choisie
-        // Par défaut : pas de bornes (toutes les dates)
         long dateDebut = 0;
         long dateFin = Long.MAX_VALUE;
         Calendar cal = Calendar.getInstance();
 
         switch (indexPeriode) {
-            case 1: // Aujourd'hui : de 00:00:00 à 23:59:59
+            case 1: // Aujourd'hui
                 cal.set(Calendar.HOUR_OF_DAY, 0); cal.set(Calendar.MINUTE, 0); cal.set(Calendar.SECOND, 0);
                 dateDebut = cal.getTimeInMillis();
                 cal.set(Calendar.HOUR_OF_DAY, 23); cal.set(Calendar.MINUTE, 59); cal.set(Calendar.SECOND, 59);
                 dateFin = cal.getTimeInMillis();
                 break;
-            case 2: // Cette semaine : du lundi (ou dim) au dim (ou sam)
+            case 2: // Cette semaine
                 cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
                 cal.set(Calendar.HOUR_OF_DAY, 0); cal.set(Calendar.MINUTE, 0);
                 dateDebut = cal.getTimeInMillis();
@@ -144,7 +140,7 @@ public class RevenusFragment extends Fragment {
                 cal.set(Calendar.HOUR_OF_DAY, 23); cal.set(Calendar.MINUTE, 59);
                 dateFin = cal.getTimeInMillis();
                 break;
-            case 3: // Ce mois : du 1er au dernier jour
+            case 3: // Ce mois
                 cal.set(Calendar.DAY_OF_MONTH, 1);
                 cal.set(Calendar.HOUR_OF_DAY, 0);
                 dateDebut = cal.getTimeInMillis();
@@ -154,12 +150,20 @@ public class RevenusFragment extends Fragment {
                 break;
         }
 
-        // D. APPEL AU DAO et mise à jour de l'adapter
         try {
             AppDatabase db = AppDatabase.getInstance(getContext());
             List<Revenu> revenusFiltres = db.appDao().getRevenusFiltres(userId, sourceFiltre, dateDebut, dateFin);
+
             if (adapter != null) {
                 adapter.setRevenus(revenusFiltres);
+
+                if (revenusFiltres.isEmpty()) {
+                    layoutEmpty.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    layoutEmpty.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
