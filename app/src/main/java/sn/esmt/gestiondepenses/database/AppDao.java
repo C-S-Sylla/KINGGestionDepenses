@@ -101,4 +101,6 @@ public interface AppDao {
 
     @Query("SELECT SUM(montant) FROM depenses WHERE utilisateurId = :userId AND categorieId = :catId AND date >= :debut AND date <= :fin")
     Double getSommeDepensesParCategorie(int userId, int catId, long debut, long fin);
+    @Delete
+    void deleteBudget(Budget budget);
 }

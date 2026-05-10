@@ -7,17 +7,19 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
     app:cardBackgroundColor="@color/card_bg"
-    app:cardCornerRadius="15dp">
+    app:cardCornerRadius="15dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/txtNomCategorie"
                 android:layout_width="wrap_content"
@@ -25,12 +27,30 @@
                 android:text="Alimentation"
                 android:textColor="@color/accent"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/btnDeleteBudget" />
+
+            <!-- BOUTON SUPPRIMER : On ajoute du padding et on le place bien à droite -->
+            <ImageView
+                android:id="@+id/btnDeleteBudget"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_toStartOf="@id/txtPourcentage"
+                android:layout_marginEnd="10dp"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/error_red" />
+
             <TextView
                 android:id="@+id/txtPourcentage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:text="0%"
                 android:textColor="@color/text_secondary" />
         </RelativeLayout>
@@ -51,23 +71,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0 / 0 FCFA"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp" />
+                android:textColor="@color/text_primary" />
             <TextView
                 android:id="@+id/txtReste"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:text="Reste : 0 F"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp" />
+                android:textColor="@color/text_secondary" />
         </RelativeLayout>
 
+        <!-- L'ALERTE : On s'assure qu'elle ne pousse rien de critique -->
         <TextView
             android:id="@+id/txtAlerte"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:text="⚠️ PLAFOND DÉPASSÉ !"
             android:textColor="@color/error_red"
             android:textStyle="bold"

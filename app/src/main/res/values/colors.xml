@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Look Marbre & Platine -->
-    <color name="app_bg">#F2F2F2</color>           <!-- Marbre (Gris très clair) -->
+    <color name="app_bg">#F2F2F2</color>           <!-- Marbre -->
     <color name="card_bg">#FFFFFF</color>          <!-- Blanc pur -->
-    <color name="accent">#B4B4B4</color>           <!-- Platine (Argenté métallique) -->
+    <color name="accent">#B4B4B4</color>           <!-- Platine -->
     <color name="text_primary">#2C2C2C</color>     <!-- Anthracite pour la lecture -->
     <color name="text_secondary">#757575</color>
     <color name="error_red">#B00020</color>
 
-    <!-- Aliases pour la compatibilité avec tes layouts XML (Indispensable pour pas que ça crash) -->
     <color name="charcoal_dark">#F2F2F2</color>    <!-- Devient Marbre en mode clair -->
     <color name="charcoal_light">#E0E0E0</color>
     <color name="gold_primary">#B4B4B4</color>     <!-- Devient Platine en mode clair -->

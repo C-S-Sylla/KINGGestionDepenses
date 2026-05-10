@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -34,6 +36,25 @@ public class BudgetsFragment extends Fragment {
         recyclerView = root.findViewById(R.id.recyclerBudgets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new BudgetAdapter();
+        adapter.setOnBudgetClickListener(budget -> {
+            if (getActivity() != null) {
+                new android.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Suppression")
+                        .setMessage("Voulez-vous supprimer ce budget ?")
+                        .setPositiveButton("OUI", (dialog, which) -> {
+                            // Suppression asynchrone sécurisée
+                            new Thread(() -> {
+                                AppDatabase.getInstance(requireContext()).appDao().deleteBudget(budget);
+                                getActivity().runOnUiThread(() -> {
+                                    chargerDonneesBudget();
+                                    Toast.makeText(requireContext(), "Budget supprimé", Toast.LENGTH_SHORT).show();
+                                });
+                            }).start();
+                        })
+                        .setNegativeButton("NON", null)
+                        .show();
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = root.findViewById(R.id.fabAddBudget);
@@ -101,4 +122,5 @@ public class BudgetsFragment extends Fragment {
         if (id < cats.length) return cats[id];
         return "Inconnu";
     }
+
 }

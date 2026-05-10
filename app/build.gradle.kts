@@ -54,4 +54,5 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

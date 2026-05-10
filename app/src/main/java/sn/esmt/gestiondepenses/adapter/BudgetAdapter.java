@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -14,9 +15,9 @@ import java.util.List;
 import sn.esmt.gestiondepenses.R;
 import sn.esmt.gestiondepenses.model.Budget;
 
+
 public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetHolder> {
 
-    // On crée une petite classe interne pour transporter les données calculées
     public static class BudgetUIModel {
         public Budget budget;
         public double depenseActuelle;
@@ -30,6 +31,15 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetHold
     }
 
     private List<BudgetUIModel> items = new ArrayList<>();
+    private OnBudgetClickListener listener;
+
+    public interface OnBudgetClickListener {
+        void onDeleteClick(Budget budget);
+    }
+
+    public void setOnBudgetClickListener(OnBudgetClickListener l) {
+        this.listener = l;
+    }
 
     public void setData(List<BudgetUIModel> newItems) {
         this.items = newItems;
@@ -49,7 +59,6 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetHold
         double plafond = model.budget.montantPlafond;
         double consomme = model.depenseActuelle;
 
-        // 1. Calcul du pourcentage (Page 8 du CDC)
         int pourcentage = (int) ((consomme / plafond) * 100);
 
         holder.txtNom.setText(model.nomCategorie);
@@ -59,11 +68,8 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetHold
         double reste = plafond - consomme;
         holder.txtReste.setText("Dispo : " + (int)(reste < 0 ? 0 : reste) + " F");
 
-        // 2. Mise à jour de la barre
         holder.progress.setProgress(Math.min(pourcentage, 100));
 
-        // 3. LOGIQUE COULEUR (Page 4 du CDC)
-        // Vert < 70% | Orange 70-90% | Rouge > 90%
         int couleur;
         if (pourcentage < 70) {
             couleur = Color.parseColor("#4CAF50");
@@ -75,12 +81,17 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetHold
 
         holder.progress.setProgressTintList(ColorStateList.valueOf(couleur));
 
-        // 4. Afficher l'alerte si dépassé
         if (pourcentage > 100) {
             holder.txtAlerte.setVisibility(View.VISIBLE);
         } else {
             holder.txtAlerte.setVisibility(View.GONE);
         }
+
+        holder.btnDelete.setOnClickListener(v -> {
+            if (listener != null && model.budget != null) {
+                listener.onDeleteClick(model.budget);
+            }
+        });
     }
 
     @Override
@@ -89,6 +100,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetHold
     class BudgetHolder extends RecyclerView.ViewHolder {
         TextView txtNom, txtPourcentage, txtConsomme, txtReste, txtAlerte;
         ProgressBar progress;
+        ImageView btnDelete;
 
         public BudgetHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,6 +110,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.BudgetHold
             txtReste = itemView.findViewById(R.id.txtReste);
             txtAlerte = itemView.findViewById(R.id.txtAlerte);
             progress = itemView.findViewById(R.id.progressBudget);
+            btnDelete = itemView.findViewById(R.id.btnDeleteBudget);
         }
     }
 }

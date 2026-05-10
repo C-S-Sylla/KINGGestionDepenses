@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Titre de bienvenue avec l'ID pour le Java -->
         <TextView
             android:id="@+id/txtBonjour"
             android:layout_width="wrap_content"
@@ -24,72 +23,85 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Voici l'état de vos finances"
+            android:text="Résumé de votre santé financière"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:layout_marginBottom="25dp" />
+            android:layout_marginBottom="20dp" />
 
-        <!-- CARTE DE SOLDE -->
+        <!-- ZONE ALERTES (Nouveau : Apparaît si un budget est dépassé) -->
+        <LinearLayout
+            android:id="@+id/layoutAlertes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="15dp" />
+
+        <!-- CARTE DE SOLDE GOLD -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="160dp"
             app:cardCornerRadius="24dp"
-            app:cardElevation="10dp"
             app:cardBackgroundColor="@color/accent">
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="25dp">
-
-                <TextView
-                    android:id="@+id/txtLabelSolde"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Solde Disponible"
-                    android:textColor="@color/app_bg"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/txtSoldeValeur"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txtLabelSolde"
-                    android:text="0 FCFA"
-                    android:textColor="@color/app_bg"
-                    android:textSize="32sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="10dp" />
-
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_budget"
-                    app:tint="@color/app_bg"
-                    android:alpha="0.2" />
-
+                android:padding="20dp">
+                <TextView android:id="@+id/lbl" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Solde Disponible" android:textColor="@color/app_bg" />
+                <TextView android:id="@+id/txtSoldeValeur" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/lbl" android:text="0 FCFA" android:textColor="@color/app_bg" android:textSize="28sp" android:textStyle="bold" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Section Dernières Transactions -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dernières transactions"
-            android:textColor="@color/accent"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="15dp" />
-
-        <!-- La vraie liste (RecyclerView) -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerTop5Transactions"
+        <!-- SECTION ANALYSE (Nouveau : Sélecteur Liste/Graphique) -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="10dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleView"
+                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            app:singleSelection="true"
+            app:checkedButton="@id/btnShowList">
+
+            <Button
+                android:id="@+id/btnShowList"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Dernières dépenses"
+            android:textSize="10sp" />
+
+            <Button
+                android:id="@+id/btnShowChart"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Graphique"
+            android:textSize="10sp" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerTop5Transactions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChartRepartition"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:visibility="gone" />
+        </FrameLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
